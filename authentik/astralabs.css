@@ -174,7 +174,7 @@ html body {
 
 /* The marks hang off the login container, which fills the viewport and leaves its
    pseudo-elements free (PatternFly already uses the background layer's). They settle
-   24px in from the corners. */
+   24px in from the corners, 16px on phones. */
 .pf-c-login {
   position: relative;
   --al-reg-in: 24px;
@@ -227,12 +227,48 @@ html body {
   100% { opacity: 1; left: var(--al-reg-far); top: var(--al-reg-far); }
 }
 
-/* on phones the card fills the screen edge to edge, so there's no background for them */
 @media (max-width: 480px) {
-  .pf-c-login::before,
-  .pf-c-login::after {
-    display: none;
-  }
+  .pf-c-login { --al-reg-in: 16px; }
+}
+
+/* ---------- login layout ----------
+   One column: the card centred in the screen, the footer pinned to the bottom. Heights use the
+   visible viewport (dvh): authentik sizes this with 100vh, which on phones is taller than the
+   screen, so the footer sat below the fold. The padding keeps clear of the registration marks.
+   Only the default (stacked) layout; the sidebar layouts are left as authentik draws them. */
+.pf-c-login:not([data-layout^="sidebar"]) {
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 3.5rem 1rem 1.25rem !important;
+}
+
+/* authentik's wrapper around the card and footer: fill the space instead of a fixed 100vh */
+.pf-c-login:not([data-layout^="sidebar"]) .ak-login-container {
+  flex: 1 1 auto;
+  height: auto !important;
+  min-height: 0;
+  width: 100%;
+  max-width: 35rem;
+}
+
+.pf-c-login:not([data-layout^="sidebar"]) .pf-c-login__main {
+  flex: 0 0 auto !important;
+  width: 100%;
+  max-width: 35rem;
+  margin: auto 0 !important;
+}
+
+.pf-c-login:not([data-layout^="sidebar"]) .pf-c-login__footer {
+  flex: 0 0 auto !important;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding-bottom: 0 !important;
 }
 
 /* ---------- login card ---------- */

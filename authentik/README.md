@@ -93,7 +93,8 @@ python3 -c "import json; print(json.dumps({'branding_custom_css': open('astralab
 
 **Login and enrolment flows**
 - Carbon background with a faint 16px dot grid.
-- Two Acid registration marks on the background. On load, each blinks in and out at three spots with hard cuts, then strobes into its corner (top-left and bottom-right) and holds, like the brand's Registration align. With reduced motion turned on they simply sit in the corners. They're hidden on phones, where the card fills the screen.
+- Two Acid registration marks on the background. On load, each blinks in and out at three spots with hard cuts, then strobes into its corner (top-left and bottom-right) and holds, like the brand's Registration align. With reduced motion turned on they simply sit in the corners. On phones they sit 16px in.
+- The card sits centred in the screen with "Powered by authentik" pinned to the bottom. The page is sized to the visible screen (`dvh`), so phones don't have to scroll past the address bar to reach the footer.
 - The card is a plate panel with a hairline border and bone corner ticks, and no shadow.
 - The stage title is heavy uppercase Archivo over a measurement rule (an Acid index segment, then a hairline with end ticks).
 - Field labels are mono uppercase. Required markers are Acid.
