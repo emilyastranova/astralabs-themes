@@ -99,6 +99,11 @@ html:root,
   --pf-global--BackgroundColor--dark-100: var(--al-void);
   --pf-global--BackgroundColor--dark-200: var(--al-plate);
   --pf-global--BackgroundColor--dark-300: var(--al-rule-subtle);
+  /* authentik 2026.x points tables and other surfaces at these, with blue-grey defaults */
+  --pf-global--BackgroundColor--150: var(--al-rule-subtle);
+  --pf-global--BackgroundColor--light-100: var(--al-plate);
+  --pf-global--BackgroundColor--light-200: var(--al-void);
+  --pf-global--BackgroundColor--light-300: var(--al-rule-subtle);
   --pf-global--Color--100: var(--al-bone);
   --pf-global--Color--200: var(--al-ash);
   --pf-global--Color--dark-100: var(--al-bone);
@@ -166,10 +171,48 @@ html body {
   width: 19px;
   height: 19px;
   pointer-events: none;
+  /* authentik 2026.x lays the login out as a grid: span all of it, or the marks would be
+     measured against the card's grid cell */
+  grid-area: 1 / 1 / -1 / -1;
   background:
     linear-gradient(var(--al-acid), var(--al-acid)) center / 100% 1px no-repeat,
     linear-gradient(var(--al-acid), var(--al-acid)) center / 1px 100% no-repeat;
   animation: 1.5s step-end 0.45s both al-reg-tl;
+}
+
+/* authentik 2026.x adds a language selector in the top-left corner, where the first mark
+   settles; move it to the top-right so the marks keep their diagonal */
+ak-locale-select[part="locale-select"] {
+  left: auto !important;
+  right: 16px !important;
+  width: auto !important;
+}
+
+/* the selector itself: a small mono label like "Powered by authentik", sized to its text */
+:host(ak-locale-select) select {
+  width: auto !important;
+  field-sizing: content;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0;
+  font-family: var(--al-mono);
+  font-variation-settings: "wdth" 85;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--al-ash) !important;
+  cursor: pointer;
+  /* the globe icon sits over the select's left padding; clear it */
+  padding-left: 2.25rem !important;
+}
+
+:host(ak-locale-select) select:hover {
+  color: var(--al-acid) !important;
+}
+
+:host(ak-locale-select) .icon {
+  fill: var(--al-ash);
+  color: var(--al-ash);
 }
 
 /* The marks hang off the login container, which fills the viewport and leaves its
@@ -235,8 +278,9 @@ html body {
    One column: the card centred in the screen, the footer pinned to the bottom. Heights use the
    visible viewport (dvh): authentik sizes this with 100vh, which on phones is taller than the
    screen, so the footer sat below the fold. The padding keeps clear of the registration marks.
-   Only the default (stacked) layout; the sidebar layouts are left as authentik draws them. */
-.pf-c-login:not([data-layout^="sidebar"]) {
+   Only authentik 2025.x's stacked layout, recognised by its .ak-login-container wrapper:
+   2026.x lays the login out with its own CSS grid, which already centres the card. */
+.pf-c-login:not([data-layout^="sidebar"]):has(.ak-login-container) {
   min-height: 100vh;
   min-height: 100dvh;
   box-sizing: border-box;
@@ -249,7 +293,7 @@ html body {
 }
 
 /* authentik's wrapper around the card and footer: fill the space instead of a fixed 100vh */
-.pf-c-login:not([data-layout^="sidebar"]) .ak-login-container {
+.pf-c-login:not([data-layout^="sidebar"]):has(.ak-login-container) .ak-login-container {
   flex: 1 1 auto;
   height: auto !important;
   min-height: 0;
@@ -257,18 +301,27 @@ html body {
   max-width: 35rem;
 }
 
-.pf-c-login:not([data-layout^="sidebar"]) .pf-c-login__main {
+.pf-c-login:not([data-layout^="sidebar"]):has(.ak-login-container) .pf-c-login__main {
   flex: 0 0 auto !important;
   width: 100%;
   max-width: 35rem;
   margin: auto 0 !important;
 }
 
-.pf-c-login:not([data-layout^="sidebar"]) .pf-c-login__footer {
+.pf-c-login:not([data-layout^="sidebar"]):has(.ak-login-container) .pf-c-login__footer {
   flex: 0 0 auto !important;
   width: 100%;
   margin-top: 1.5rem;
   padding-bottom: 0 !important;
+}
+
+/* authentik 2026.x on phones: its grid runs the card edge to edge; inset it like 2025.
+   (In 2026 the flow executor element itself carries .pf-c-login, and the card is inside it.) */
+@media (max-width: 600px) {
+  :host(.pf-c-login) .pf-c-login__main {
+    width: auto !important;
+    margin-inline: 1rem !important;
+  }
 }
 
 /* ---------- login card ---------- */
@@ -423,6 +476,79 @@ html body {
   border-radius: 0 !important;
 }
 
+/* Mono labels with wide tracking run long, so buttons wrap between words rather than push
+   their container wider than the screen (e.g. "Select another authentication method" on a
+   phone). break-word, not anywhere: it never shrinks a button to one letter's width.
+   (Login stages render in their own components, so this can't be scoped to the card.) */
+.pf-c-button {
+  white-space: normal;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* header buttons stay on one line */
+:host(ak-nav-buttons) .pf-c-button,
+:host(ak-page-navbar) .pf-c-button {
+  white-space: nowrap;
+}
+
+.pf-c-form,
+.pf-c-form__group,
+.pf-c-form__actions {
+  min-width: 0;
+}
+
+/* MFA device picker: these are selection tiles, not buttons, so they drop the mono label
+   treatment and read as a title over a description */
+.pf-c-button.authenticator-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  font-family: var(--al-sans);
+  font-variation-settings: normal;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+  color: var(--al-bone);
+  background-color: var(--al-void);
+  border: 1px solid var(--al-rule);
+}
+
+.pf-c-button.authenticator-button:hover,
+.pf-c-button.authenticator-button:focus-visible {
+  border-color: var(--al-ash);
+  box-shadow: inset 2px 0 0 var(--al-acid);
+}
+
+.pf-c-button.authenticator-button i {
+  color: var(--al-acid);
+  font-size: 1.25rem;
+  flex: 0 0 auto;
+}
+
+.pf-c-button.authenticator-button .pf-c-title {
+  font-family: var(--al-sans);
+  font-weight: 700;
+  font-variation-settings: normal;
+  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.3;
+  color: var(--al-mark);
+  padding: 0;
+  background: none;
+}
+
+.pf-c-button.authenticator-button .pf-c-form__helper-text {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--al-ash);
+  margin: 0.15rem 0 0;
+}
+
 /* The one cut per view: the filled primary button, top-right, at the mark's 60° */
 .pf-c-button.pf-m-primary {
   --pf-c-button--m-primary--BackgroundColor: var(--al-acid);
@@ -464,12 +590,57 @@ html body {
   --pf-c-button--m-control--Color: var(--al-bone);
 }
 
+/* Plain buttons are icon buttons (table row expand arrows, close, kebab menus): they keep
+   the normal font, since mono label metrics shifted their icons off centre */
+.pf-c-button.pf-m-plain {
+  font-family: var(--al-sans);
+  font-variation-settings: normal;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* row toggles and checkboxes sit centred in their row */
+.pf-c-table__toggle,
+.pf-c-table__check {
+  vertical-align: middle !important;
+}
+
 .pf-c-button.pf-m-link,
 .pf-c-button.pf-m-plain {
   --pf-c-button--m-link--Color: var(--al-bone);
   --pf-c-button--m-link--hover--Color: var(--al-acid);
   --pf-c-button--m-plain--Color: var(--al-ash);
   --pf-c-button--m-plain--hover--Color: var(--al-acid);
+}
+
+/* Button stacks in narrow detail columns (user details: Edit, Deactivate, Set password,
+   Create / Email recovery link): full column width, compact mono so labels fit on a line */
+.ak-button-collection .pf-c-button,
+.ak-button-collection ak-action-button::part(spinner-button) {
+  width: 100%;
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  font-variation-settings: "wdth" 75;
+  padding-inline: 0.5rem;
+}
+
+/* warning actions (Deactivate) are outlined in the warn colour, like danger, rather than
+   bone text on a filled orange */
+.pf-c-button.pf-m-warning {
+  --pf-c-button--m-warning--BackgroundColor: transparent;
+  --pf-c-button--m-warning--Color: var(--al-warn);
+  --pf-c-button--m-warning--hover--BackgroundColor: var(--al-warn);
+  --pf-c-button--m-warning--hover--Color: var(--al-on-acid);
+  --pf-c-button--after--BorderColor: var(--al-warn);
+  background-color: transparent;
+  color: var(--al-warn);
+  border: 1px solid var(--al-warn);
+}
+
+.pf-c-button.pf-m-warning:hover,
+.pf-c-button.pf-m-warning:focus-visible {
+  background-color: var(--al-warn);
+  color: var(--al-on-acid);
 }
 
 .pf-c-button.pf-m-danger {
@@ -533,6 +704,7 @@ html body {
 /* ---------- alerts, chips, user avatar ---------- */
 .pf-c-alert {
   --pf-c-alert--BackgroundColor: var(--al-plate);
+  background-color: var(--al-plate) !important;
   --pf-c-alert--BoxShadow: none;
   --pf-c-alert--BorderTopWidth: 0;
   border: 1px solid var(--al-rule);
@@ -635,12 +807,71 @@ html body {
   opacity: 1;
 }
 
+/* tables sit on their card's plate; 2026.x gives them their own blue-grey background */
+.pf-c-table {
+  --pf-c-table--BackgroundColor: transparent !important;
+  --pf-c-table--m-striped__tr--BackgroundColor: rgb(237 230 225 / 3%) !important;
+  background-color: transparent !important;
+}
+
+/* admin sidebar: the current item is a faint bone tint (2026.x uses a grey) */
+.pf-c-nav__link.pf-m-current,
+.pf-c-nav__link.pf-m-current:hover,
+.pf-c-nav__item.pf-m-current:not(.pf-m-expanded) .pf-c-nav__link {
+  --pf-c-nav__link--m-current--BackgroundColor: rgb(237 230 225 / 5%) !important;
+  background-color: rgb(237 230 225 / 5%) !important;
+}
+
+/* "Enterprise" badges on sidebar items: a mono tag, not a grey pill */
+.pf-c-nav__enterprise-notice {
+  background-color: transparent !important;
+  border: 1px solid var(--al-rule);
+  border-radius: 0 !important;
+  color: var(--al-ash) !important;
+  font-family: var(--al-mono);
+  font-variation-settings: "wdth" 85;
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 /* admin sidebar: current item gets a 2px acid bar instead of authentik's orange */
 .pf-c-nav__link.pf-m-current::after,
 .pf-c-nav__link.pf-m-current:hover::after,
 .pf-c-nav__item.pf-m-current .pf-c-nav__link::after {
   border-color: var(--al-acid) !important;
   border-left-width: 2px !important;
+}
+
+/* Page header: the heavy uppercase title has a long minimum width, and authentik lets it
+   set the header's width; on phones that made the whole page wider than the screen, clipping
+   cards like Recent events. Let the title shrink (it still wraps between words). */
+:host(ak-page-navbar) .items.primary,
+:host(ak-page-navbar) .page-title {
+  min-width: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  :host(ak-page-navbar) .page-title {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  /* tighter header buttons ("User interface", "Admin interface") leave the title room */
+  :host(ak-nav-buttons) .pf-c-button {
+    letter-spacing: 0.04em;
+    padding-inline: 0.5rem;
+  }
+}
+
+/* Recent events: long dotted names (authentik.core.management.commands.shell) can't wrap and
+   pushed the table wider than its card. Let its cells break them. Only here: on other
+   tables this split usernames mid-word. */
+:host(ak-recent-events) .pf-c-table td,
+:host(ak-recent-events) .pf-c-table td small,
+:host(ak-recent-events) .pf-c-table td div {
+  overflow-wrap: anywhere;
 }
 
 /* application group headings as mono labels */
@@ -692,6 +923,8 @@ legend.pf-c-content h2 {
 }
 
 .pf-c-label__content::before {
+  border-width: 1px !important;
+  border-style: solid !important;
   border-color: var(--al-label) !important;
   border-radius: 0 !important;
 }
@@ -704,6 +937,134 @@ legend.pf-c-content h2 {
 :host(ak-skip-to-content) button,
 :host(ak-skip-to-content) a {
   color: var(--al-on-acid) !important;
+}
+
+/* ---------- switches, checkboxes, radios ----------
+   As in the AstraLabs web kit. Switch: a square 40x20 track with a 1px ash border and a 12px
+   square ash knob; on, both turn acid and the knob slides across on Snap. Checkbox: a 16px
+   square; checked, the border turns acid and an 8px acid square snaps in. Radios are the
+   same, round. Colour changes are hard cuts (Flick). */
+.pf-c-switch__toggle {
+  width: 40px !important;
+  height: 20px !important;
+  background-color: var(--al-void) !important;
+  border: 1px solid var(--al-ash);
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: border-color 40ms steps(1, end);
+}
+
+.pf-c-switch__toggle::before {
+  top: 3px !important;
+  left: 3px !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 0 !important;
+  background-color: var(--al-ash) !important;
+  box-shadow: none !important;
+  transform: translateX(0) !important;
+  transition:
+    transform 200ms cubic-bezier(0.3, 1.35, 0.5, 1),
+    background-color 40ms steps(1, end) !important;
+}
+
+.pf-c-switch__toggle-icon {
+  display: none !important;
+}
+
+.pf-c-switch__input:checked + .pf-c-switch__toggle {
+  border-color: var(--al-acid);
+}
+
+.pf-c-switch__input:checked + .pf-c-switch__toggle::before {
+  transform: translateX(20px) !important;
+  background-color: var(--al-acid) !important;
+}
+
+.pf-c-switch__input:disabled + .pf-c-switch__toggle {
+  opacity: 0.4;
+}
+
+.pf-c-switch__input:focus-visible + .pf-c-switch__toggle {
+  outline: 2px solid var(--al-acid);
+  outline-offset: 3px;
+}
+
+.pf-c-switch__label {
+  color: var(--al-bone) !important;
+}
+
+input[type="checkbox"]:not(.pf-c-switch__input),
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border: 1px solid var(--al-ash);
+  border-radius: 0;
+  background-color: var(--al-void);
+  vertical-align: middle;
+  cursor: pointer;
+  transition: border-color 40ms steps(1, end);
+}
+
+input[type="checkbox"]:not(.pf-c-switch__input)::after,
+input[type="radio"]::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: var(--al-acid);
+  transform: scale(0);
+  transition: transform 200ms cubic-bezier(0.3, 1.35, 0.5, 1);
+}
+
+input[type="checkbox"]:not(.pf-c-switch__input):checked,
+input[type="radio"]:checked {
+  border-color: var(--al-acid);
+}
+
+input[type="checkbox"]:not(.pf-c-switch__input):checked::after,
+input[type="radio"]:checked::after {
+  transform: scale(1);
+}
+
+/* mixed state ("select all" with some rows selected): a bar instead of a square */
+input[type="checkbox"]:not(.pf-c-switch__input):indeterminate {
+  border-color: var(--al-acid);
+}
+
+input[type="checkbox"]:not(.pf-c-switch__input):indeterminate::after {
+  height: 2px;
+  transform: scale(1);
+}
+
+input[type="radio"],
+input[type="radio"]::after {
+  border-radius: 50%;
+}
+
+input[type="checkbox"]:disabled,
+input[type="radio"]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--al-acid);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-c-switch__toggle::before,
+  input[type="checkbox"]::after,
+  input[type="radio"]::after {
+    transition: none !important;
+  }
 }
 
 /* ---------- notifications ---------- */

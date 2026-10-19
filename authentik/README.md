@@ -31,7 +31,7 @@
 | `branding/astralabs-mark.svg` | The mark on its own, for anywhere a square logo fits better. |
 | `branding/astralabs-flow-background.svg` | Carbon with the 16px dot grid, used as the default flow background. |
 
-Tested on authentik **2025.10.3**. The CSS also sets the variables newer releases use (2026.x and the semantic `--ak-color-*` set), but those versions haven't been tested.
+Tested on authentik **2025.10.3** and **2026.2.7**. The two versions lay the login page out differently (2026 uses a CSS grid and adds a language selector); the CSS handles both. It also sets the semantic `--ak-color-*` variables from authentik's newer docs.
 
 ---
 
@@ -93,6 +93,7 @@ python3 -c "import json; print(json.dumps({'branding_custom_css': open('astralab
 
 **Login and enrolment flows**
 - Carbon background with a faint 16px dot grid.
+- On 2026.x the language selector moves to the top-right corner as a small mono label, so it doesn't sit on the top-left mark.
 - Two Acid registration marks on the background. On load, each blinks in and out at three spots with hard cuts, then strobes into its corner (top-left and bottom-right) and holds, like the brand's Registration align. With reduced motion turned on they simply sit in the corners. On phones they sit 16px in.
 - The card sits centred in the screen with "Powered by authentik" pinned to the bottom. The page is sized to the visible screen (`dvh`), so phones don't have to scroll past the address bar to reach the footer.
 - The card is a plate panel with a hairline border and bone corner ticks, and no shadow.
@@ -110,7 +111,7 @@ python3 -c "import json; print(json.dumps({'branding_custom_css': open('astralab
 **Admin interface**
 - The same palette, fonts and square corners. The current sidebar item gets an Acid bar instead of authentik's orange.
 - Status labels (Yes/No and similar) are outlined chips in the status colours, instead of PatternFly's light pastel chips, which put green text on near-white.
-- Radios, checkboxes and switches use Acid; disabled buttons are a quiet outline.
+- Switches, checkboxes and radios follow the AstraLabs web kit: square, with a 1px ash border on carbon. Switched on, the track and its square knob turn acid and the knob slides across (Snap); checked, an 8px acid square snaps in. Disabled buttons are a quiet outline.
 
 **Notifications (both interfaces)**
 - The unread badge on the bell is Acid with dark text.

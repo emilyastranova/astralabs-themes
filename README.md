@@ -25,7 +25,7 @@
     <td>
       <h3><a href="authentik/">authentik</a></h3>
       Single sign-on at <code>auth.astralabs.dev</code>. Brand custom CSS for the login and enrolment flows, the app library and the admin interface, plus the logo and favicon.<br><br>
-      Tested on authentik 2025.10.3.
+      Tested on authentik 2025.10.3 and 2026.2.7.
     </td>
   </tr>
 </table>
