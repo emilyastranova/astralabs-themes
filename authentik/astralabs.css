@@ -1,0 +1,552 @@
+/*
+  AstraLabs theme for authentik
+  Paste into System → Brands → (your brand) → Custom CSS.
+
+  Carbon ground, Bone text, Acid for interaction; square corners, hairline rules,
+  mono labels, one 60° cut on the primary button.
+
+  Notes for editing:
+  - authentik copies this CSS into every component's shadow root and into a style element
+    in the page head. The page copy escapes the less-than, greater-than and ampersand
+    characters, so this file never uses them: no child combinators, and one font family
+    per @import.
+  - Variables are set three ways so the theme holds across versions: authentik 2025.x
+    (--ak-dark-*), authentik 2026.x (--ak-font-family-*, --ak-v2-*) and PatternFly 4
+    (--pf-global--*), which every version still uses underneath.
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900");
+@import url("https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,100..800");
+
+/* ---------- tokens ----------
+   :host covers each component. At page level authentik's own :root sheet is added after
+   this one, so html:root (one step more specific) is what lets these values win there. */
+html:root,
+:root,
+:host {
+  --al-void: #0a0909;
+  --al-plate: #131212;
+  --al-rule: #2c2a29;
+  --al-rule-subtle: #1c1b1a;
+  --al-mark: #ffffff;
+  --al-bone: #ede6e1;
+  --al-ash: #8e8380;
+  --al-acid: #b6ff2e;
+  --al-acid-hi: #ccff6b;
+  --al-on-acid: #0a0909;
+  --al-ok: #4dff88;
+  --al-warn: #ffa21f;
+  --al-down: #ff2e3a;
+  --al-dot: rgb(237 230 225 / 10%);
+  --al-sans: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --al-mono: "Martian Mono", ui-monospace, Menlo, monospace;
+
+  /* authentik 2025.x: the dark theme is built from these */
+  --ak-accent: var(--al-acid);
+  --ak-dark-foreground: var(--al-bone);
+  --ak-dark-foreground-darker: var(--al-ash);
+  --ak-dark-foreground-link: var(--al-bone);
+  --ak-dark-background: var(--al-void);
+  --ak-dark-background-darker: var(--al-void);
+  --ak-dark-background-light: var(--al-plate);
+  --ak-dark-background-light-ish: var(--al-rule-subtle);
+  --ak-dark-background-lighter: var(--al-rule);
+  --ak-brand-background-color: var(--al-void);
+
+  /* authentik 2026.x */
+  --ak-font-family-sans-serif: var(--al-sans);
+  --ak-font-family-heading: var(--al-sans);
+  --ak-v2-global--dark-background: var(--al-void);
+
+  /* authentik semantic variables (newer releases) */
+  --ak-color-accent: var(--al-acid);
+  --ak-color-primary: var(--al-acid);
+  --ak-color-link: var(--al-bone);
+  --ak-color-text: var(--al-bone);
+  --ak-color-text-muted: var(--al-ash);
+  --ak-color-surface: var(--al-plate);
+  --ak-color-surface-muted: var(--al-void);
+  --ak-color-border: var(--al-rule);
+  --ak-color-info: var(--al-acid);
+  --ak-color-success: var(--al-ok);
+  --ak-color-warning: var(--al-warn);
+  --ak-color-danger: var(--al-down);
+  --ak-radius-sm: 0;
+  --ak-shadow-md: none;
+  --ak-shadow-lg: none;
+
+  /* PatternFly 4 */
+  --pf-global--FontFamily--sans-serif: var(--al-sans);
+  --pf-global--FontFamily--heading--sans-serif: var(--al-sans);
+  --pf-global--FontFamily--monospace: var(--al-mono);
+  --pf-global--FontFamily--redhatfont--sans-serif: var(--al-sans);
+  --pf-global--FontFamily--redhatfont--heading--sans-serif: var(--al-sans);
+  --pf-global--FontFamily--redhatfont--monospace: var(--al-mono);
+
+  --pf-global--primary-color--100: var(--al-acid);
+  --pf-global--primary-color--200: var(--al-acid-hi);
+  --pf-global--primary-color--dark-100: var(--al-acid);
+  --pf-global--primary-color--light-100: var(--al-acid);
+  --pf-global--active-color--100: var(--al-acid);
+  --pf-global--link--Color: var(--al-bone);
+  --pf-global--link--Color--hover: var(--al-acid);
+  --pf-global--link--Color--dark: var(--al-bone);
+  --pf-global--link--Color--light: var(--al-bone);
+  --pf-global--link--Color--light--hover: var(--al-acid);
+
+  --pf-global--BackgroundColor--100: var(--al-plate);
+  --pf-global--BackgroundColor--200: var(--al-void);
+  --pf-global--BackgroundColor--dark-100: var(--al-void);
+  --pf-global--BackgroundColor--dark-200: var(--al-plate);
+  --pf-global--BackgroundColor--dark-300: var(--al-rule-subtle);
+  --pf-global--Color--100: var(--al-bone);
+  --pf-global--Color--200: var(--al-ash);
+  --pf-global--Color--dark-100: var(--al-bone);
+  --pf-global--Color--dark-200: var(--al-ash);
+  --pf-global--Color--light-100: var(--al-bone);
+  --pf-global--Color--light-200: var(--al-ash);
+  --pf-global--BorderColor--100: var(--al-rule);
+  --pf-global--BorderColor--200: var(--al-rule);
+  --pf-global--BorderColor--300: var(--al-rule-subtle);
+  --pf-global--BorderColor--dark-100: var(--al-rule);
+
+  --pf-global--danger-color--100: var(--al-down);
+  --pf-global--danger-color--200: var(--al-down);
+  --pf-global--warning-color--100: var(--al-warn);
+  --pf-global--warning-color--200: var(--al-warn);
+  --pf-global--success-color--100: var(--al-ok);
+  --pf-global--success-color--200: var(--al-ok);
+  --pf-global--info-color--100: var(--al-acid);
+  --pf-global--info-color--200: var(--al-acid);
+
+  --pf-global--BorderRadius--sm: 0;
+  --pf-global--BorderRadius--lg: 0;
+  --pf-global--BoxShadow--sm: none;
+  --pf-global--BoxShadow--md: none;
+  --pf-global--BoxShadow--lg: none;
+  --pf-global--BoxShadow--xl: none;
+
+  --pf-c-spinner--Color: var(--al-acid);
+  --pf-c-login__main--BackgroundColor: var(--al-plate);
+}
+
+::selection {
+  background: var(--al-acid);
+  color: var(--al-on-acid);
+}
+
+/* ---------- page background: carbon with a faint dot grid ---------- */
+/* html body, not body: authentik's dark theme sets body with !important in a later sheet */
+html,
+html body {
+  background-color: var(--al-void) !important;
+  background-image: radial-gradient(var(--al-dot) 1px, transparent 1.2px) !important;
+  background-size: 16px 16px !important;
+  background-position: 8px 8px !important;
+}
+
+.pf-c-background-image,
+.pf-c-login {
+  background-color: var(--al-void) !important;
+  background-image: radial-gradient(var(--al-dot) 1px, transparent 1.2px) !important;
+  background-size: 16px 16px !important;
+  background-position: 8px 8px !important;
+}
+
+/* ---------- login card ---------- */
+.pf-c-login__main {
+  background-color: var(--al-plate) !important;
+  border: 1px solid var(--al-rule);
+  border-radius: 0;
+  box-shadow: none !important;
+  /* corner ticks */
+  --al-t: 1px;
+  --al-l: 10px;
+  --al-tick: rgb(237 230 225 / 55%);
+  background-image:
+    linear-gradient(var(--al-tick), var(--al-tick)), linear-gradient(var(--al-tick), var(--al-tick)),
+    linear-gradient(var(--al-tick), var(--al-tick)), linear-gradient(var(--al-tick), var(--al-tick)),
+    linear-gradient(var(--al-tick), var(--al-tick)), linear-gradient(var(--al-tick), var(--al-tick)),
+    linear-gradient(var(--al-tick), var(--al-tick)), linear-gradient(var(--al-tick), var(--al-tick)) !important;
+  background-repeat: no-repeat !important;
+  background-size:
+    var(--al-l) var(--al-t), var(--al-t) var(--al-l),
+    var(--al-l) var(--al-t), var(--al-t) var(--al-l),
+    var(--al-l) var(--al-t), var(--al-t) var(--al-l),
+    var(--al-l) var(--al-t), var(--al-t) var(--al-l) !important;
+  background-position:
+    left 6px top 6px, left 6px top 6px,
+    right 6px top 6px, right 6px top 6px,
+    left 6px bottom 6px, left 6px bottom 6px,
+    right 6px bottom 6px, right 6px bottom 6px !important;
+}
+
+/* logo */
+.pf-c-login__main-header.pf-c-brand,
+.pf-c-brand {
+  padding-block: 2.25rem 0.5rem;
+}
+
+.pf-c-brand img,
+.pf-c-login__main-header img {
+  max-height: 2.4rem;
+  width: auto;
+}
+
+/* stage title: heavy uppercase over a measurement rule */
+.pf-c-login__main-header .pf-c-title,
+.pf-c-login__main-body .pf-c-title,
+.pf-c-title.pf-m-3xl {
+  font-family: var(--al-sans);
+  font-weight: 800;
+  font-variation-settings: "wdth" 112;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  font-size: 1.5rem;
+  line-height: 1.1;
+  color: var(--al-mark);
+  padding-bottom: 0.85rem;
+  background:
+    linear-gradient(var(--al-acid), var(--al-acid)) left bottom / 1.6rem 2px no-repeat,
+    linear-gradient(var(--al-ash), var(--al-ash)) left bottom / 1px 9px no-repeat,
+    linear-gradient(var(--al-ash), var(--al-ash)) right bottom / 1px 9px no-repeat,
+    linear-gradient(var(--al-rule), var(--al-rule)) left bottom / 100% 1px no-repeat;
+}
+
+.pf-c-login__main-header-desc,
+.pf-c-login__main-body p {
+  color: var(--al-ash);
+}
+
+/* ---------- form ---------- */
+.pf-c-form__label,
+.pf-c-form__label-text {
+  font-family: var(--al-mono);
+  font-variation-settings: "wdth" 85;
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--al-ash);
+}
+
+/* required marker: authentik draws the asterisk after the label text */
+.pf-c-form__label-required,
+.pf-c-form__label-text::after {
+  --pf-c-form__label-required--Color: var(--al-acid);
+  color: var(--al-acid) !important;
+}
+
+.pf-c-form-control {
+  --pf-c-form-control--BackgroundColor: var(--al-void) !important;
+  --pf-c-form-control--Color: var(--al-bone) !important;
+  --pf-c-form-control--BorderTopColor: var(--al-rule) !important;
+  --pf-c-form-control--BorderRightColor: var(--al-rule) !important;
+  --pf-c-form-control--BorderBottomColor: var(--al-rule) !important;
+  --pf-c-form-control--BorderLeftColor: var(--al-rule) !important;
+  --pf-c-form-control--hover--BorderBottomColor: var(--al-ash) !important;
+  --pf-c-form-control--focus--BorderBottomColor: var(--al-acid) !important;
+  --pf-c-form-control--focus--BorderBottomWidth: 1px !important;
+  --pf-c-form-control--focus--PaddingBottom: var(--pf-c-form-control--PaddingBottom) !important;
+  font-family: var(--al-sans);
+  border-radius: 0;
+}
+
+.pf-c-form-control:focus,
+.pf-c-form-control:focus-within {
+  outline: 2px solid var(--al-acid);
+  outline-offset: 2px;
+}
+
+/* invalid input: the down red replaces acid on the border and focus ring */
+.pf-c-form-control[aria-invalid="true"],
+.pf-c-form-control.pf-m-error {
+  --pf-c-form-control--BorderTopColor: var(--al-down) !important;
+  --pf-c-form-control--BorderRightColor: var(--al-down) !important;
+  --pf-c-form-control--BorderBottomColor: var(--al-down) !important;
+  --pf-c-form-control--BorderLeftColor: var(--al-down) !important;
+  --pf-c-form-control--focus--BorderBottomColor: var(--al-down) !important;
+  --pf-c-form-control--invalid--BorderBottomColor: var(--al-down) !important;
+}
+
+.pf-c-form-control[aria-invalid="true"]:focus,
+.pf-c-form-control.pf-m-error:focus {
+  outline-color: var(--al-down);
+}
+
+.pf-c-form-control::placeholder {
+  color: var(--al-ash);
+}
+
+.pf-c-form__helper-text {
+  color: var(--al-ash);
+}
+
+.pf-c-form__helper-text.pf-m-error {
+  color: var(--al-down);
+}
+
+.pf-c-check__label {
+  color: var(--al-bone);
+}
+
+/* ---------- buttons ---------- */
+.pf-c-button {
+  border-radius: 0 !important;
+  font-family: var(--al-mono);
+  font-variation-settings: "wdth" 85;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.pf-c-button::after {
+  border-radius: 0 !important;
+}
+
+/* The one cut per view: the filled primary button, top-right, at the mark's 60° */
+.pf-c-button.pf-m-primary {
+  --pf-c-button--m-primary--BackgroundColor: var(--al-acid);
+  --pf-c-button--m-primary--Color: var(--al-on-acid);
+  --pf-c-button--m-primary--hover--BackgroundColor: var(--al-acid-hi);
+  --pf-c-button--m-primary--hover--Color: var(--al-on-acid);
+  --pf-c-button--m-primary--focus--BackgroundColor: var(--al-acid-hi);
+  --pf-c-button--m-primary--focus--Color: var(--al-on-acid);
+  --pf-c-button--m-primary--active--BackgroundColor: var(--al-acid-hi);
+  --pf-c-button--m-primary--active--Color: var(--al-on-acid);
+  background-color: var(--al-acid);
+  color: var(--al-on-acid);
+  clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 15.6px, 100% 100%, 0 100%);
+  padding-block: 0.75rem;
+}
+
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-primary:focus {
+  background-color: var(--al-acid-hi);
+}
+
+.pf-c-button.pf-m-primary:focus-visible {
+  /* the cut clips outlines, so focus shows as an inset ring */
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--al-on-acid);
+}
+
+.pf-c-button.pf-m-secondary,
+.pf-c-button.pf-m-tertiary,
+.pf-c-button.pf-m-control {
+  --pf-c-button--after--BorderColor: var(--al-rule);
+  --pf-c-button--hover--after--BorderColor: var(--al-ash);
+  --pf-c-button--m-secondary--Color: var(--al-bone);
+  --pf-c-button--m-secondary--hover--Color: var(--al-bone);
+  --pf-c-button--m-secondary--BackgroundColor: transparent;
+  --pf-c-button--m-tertiary--Color: var(--al-bone);
+  --pf-c-button--m-tertiary--hover--Color: var(--al-bone);
+  --pf-c-button--m-control--BackgroundColor: var(--al-void);
+  --pf-c-button--m-control--Color: var(--al-bone);
+}
+
+.pf-c-button.pf-m-link,
+.pf-c-button.pf-m-plain {
+  --pf-c-button--m-link--Color: var(--al-bone);
+  --pf-c-button--m-link--hover--Color: var(--al-acid);
+  --pf-c-button--m-plain--Color: var(--al-ash);
+  --pf-c-button--m-plain--hover--Color: var(--al-acid);
+}
+
+.pf-c-button.pf-m-danger {
+  --pf-c-button--m-danger--BackgroundColor: transparent;
+  --pf-c-button--m-danger--Color: var(--al-down);
+  --pf-c-button--after--BorderColor: var(--al-down);
+}
+
+/* ---------- links ---------- */
+.pf-c-login__main a,
+.pf-c-login__main-footer a,
+.pf-c-login__main-footer-band a {
+  color: var(--al-bone);
+  text-decoration: underline;
+  text-decoration-color: rgb(182 255 46 / 55%);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+.pf-c-login__main a:hover,
+.pf-c-login__main-footer a:hover,
+.pf-c-login__main-footer-band a:hover {
+  color: var(--al-acid);
+  text-decoration-color: var(--al-acid);
+}
+
+.pf-c-login__main-footer-band {
+  background: transparent;
+  border-top: 1px solid var(--al-rule-subtle);
+  color: var(--al-ash);
+}
+
+/* sign in with another source (OAuth, SAML, …) */
+.pf-c-login__main-footer-links-item .pf-c-button,
+.pf-c-login__main-footer-links-item-link {
+  border: 1px solid var(--al-rule);
+  border-radius: 0;
+}
+
+.pf-c-login__main-footer-links-item .pf-c-button:hover,
+.pf-c-login__main-footer-links-item-link:hover {
+  border-color: var(--al-acid);
+}
+
+/* brand links under the card ("Powered by authentik" and your own links) */
+.pf-c-login__footer,
+.pf-c-login__footer .pf-c-list,
+.pf-c-login__footer a {
+  font-family: var(--al-mono);
+  font-variation-settings: "wdth" 85;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--al-ash) !important;
+}
+
+.pf-c-login__footer a:hover {
+  color: var(--al-acid) !important;
+}
+
+/* ---------- alerts, chips, user avatar ---------- */
+.pf-c-alert {
+  --pf-c-alert--BackgroundColor: var(--al-plate);
+  --pf-c-alert--BoxShadow: none;
+  --pf-c-alert--BorderTopWidth: 0;
+  border: 1px solid var(--al-rule);
+  border-left: 2px solid var(--al-acid);
+}
+
+.pf-c-alert.pf-m-danger { border-left-color: var(--al-down); }
+.pf-c-alert.pf-m-warning { border-left-color: var(--al-warn); }
+.pf-c-alert.pf-m-success { border-left-color: var(--al-ok); }
+
+.pf-c-chip,
+.pf-c-label {
+  border-radius: 0;
+}
+
+/* "Not you?" identity row on later stages */
+.pf-c-form__group.pf-m-action ~ .pf-c-form__group,
+.form-control-static {
+  color: var(--al-bone);
+}
+
+/* ---------- user library (after login) ---------- */
+.pf-c-page__header,
+.pf-c-masthead {
+  background-color: var(--al-void) !important;
+  border-bottom: 1px solid var(--al-rule);
+}
+
+.pf-c-page__main-section {
+  background-color: var(--al-void);
+}
+
+.pf-c-card {
+  background-color: var(--al-plate);
+  border: 1px solid var(--al-rule);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.pf-c-card:hover,
+.pf-c-card.pf-m-hoverable:hover,
+.pf-c-card.pf-m-selectable:hover {
+  border-color: var(--al-ash);
+  box-shadow: inset 2px 0 0 var(--al-acid);
+}
+
+.pf-c-card__title,
+.pf-c-card__header {
+  font-family: var(--al-sans);
+  font-weight: 700;
+  color: var(--al-mark);
+}
+
+.pf-c-content h1,
+.pf-c-page__main-section .pf-c-title {
+  font-family: var(--al-sans);
+  font-weight: 800;
+  font-variation-settings: "wdth" 110;
+  text-transform: uppercase;
+  color: var(--al-mark);
+}
+
+/* library search: authentik draws it as a large underlined field sized for its own font;
+   make it a square field like the login inputs, with a placeholder that fits */
+#application-search-form {
+  min-width: min(24rem, 100%);
+}
+
+#application-search-input,
+.pf-c-form-control[part="search-input"] {
+  width: 100%;
+  font-family: var(--al-sans);
+  font-size: 1rem;
+  font-style: normal;
+  line-height: 1.5;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--al-void) !important;
+  border: 1px solid var(--al-rule);
+  border-radius: 0;
+  text-overflow: ellipsis;
+}
+
+#application-search-input:hover {
+  border-color: var(--al-ash);
+}
+
+/* The field sits flush with the edge of a header that clips overflow, so its focus ring
+   is drawn inside the border instead of outside it */
+#application-search-input:focus,
+#application-search-input:focus-visible {
+  border-color: var(--al-rule);
+  outline: 2px solid var(--al-acid);
+  outline-offset: -2px;
+}
+
+#application-search-input::placeholder,
+.pf-c-form-control[part="search-input"]::placeholder {
+  font-style: normal;
+  color: var(--al-ash);
+  opacity: 1;
+}
+
+/* admin sidebar: current item gets a 2px acid bar instead of authentik's orange */
+.pf-c-nav__link.pf-m-current::after,
+.pf-c-nav__link.pf-m-current:hover::after,
+.pf-c-nav__item.pf-m-current .pf-c-nav__link::after {
+  border-color: var(--al-acid) !important;
+  border-left-width: 2px !important;
+}
+
+/* application group headings as mono labels */
+legend.pf-c-content h2 {
+  font-family: var(--al-mono);
+  font-variation-settings: "wdth" 85;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--al-ash);
+}
+
+/* ---------- focus and motion ---------- */
+:focus-visible {
+  outline: 2px solid var(--al-acid);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
