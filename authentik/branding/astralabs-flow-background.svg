@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440">
+  <!-- AstraLabs flow background: carbon with the 16px dot grid the custom CSS draws.
+       Used as the brand's default flow background, so pages without custom CSS
+       (recovery logins, flows with their own background removed) still match. -->
+  <defs>
+    <pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="8" r="1" fill="#EDE6E1" fill-opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="2560" height="1440" fill="#0A0909"/>
+  <rect width="2560" height="1440" fill="url(#dots)"/>
+</svg>

@@ -127,6 +127,7 @@ html:root,
   --pf-global--BoxShadow--xl: none;
 
   --pf-c-spinner--Color: var(--al-acid);
+  accent-color: var(--al-acid);
   --pf-c-login__main--BackgroundColor: var(--al-plate);
 }
 
@@ -151,6 +152,87 @@ html body {
   background-image: radial-gradient(var(--al-dot) 1px, transparent 1.2px) !important;
   background-size: 16px 16px !important;
   background-position: 8px 8px !important;
+}
+
+/* ---------- registration marks ----------
+   Two acid plus marks on the login background, top-left and bottom-right. On load each one
+   cuts in and out at three spots, then strobes into its corner and holds: the brand's
+   Registration align. Every keyframe is a hard cut (step-end), so nothing slides. */
+.pf-c-login::before,
+.pf-c-login::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 19px;
+  height: 19px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--al-acid), var(--al-acid)) center / 100% 1px no-repeat,
+    linear-gradient(var(--al-acid), var(--al-acid)) center / 1px 100% no-repeat;
+  animation: 1.5s step-end 0.45s both al-reg-tl;
+}
+
+/* The marks hang off the login container, which fills the viewport and leaves its
+   pseudo-elements free (PatternFly already uses the background layer's). They settle
+   24px in from the corners. */
+.pf-c-login {
+  position: relative;
+  --al-reg-in: 24px;
+  --al-reg-far: calc(100% - var(--al-reg-in) - 19px);
+}
+
+.pf-c-login::before {
+  left: var(--al-reg-in);
+  top: var(--al-reg-in);
+}
+
+.pf-c-login::after {
+  left: var(--al-reg-far);
+  top: var(--al-reg-far);
+  animation-name: al-reg-br;
+  animation-delay: 0.56s;
+}
+
+@keyframes al-reg-tl {
+  0%   { opacity: 0; left: 61%; top: 22%; }
+  6%   { opacity: 1; left: 61%; top: 22%; }
+  13%  { opacity: 0; }
+  18%  { opacity: 1; left: 17%; top: 68%; }
+  25%  { opacity: 0; }
+  31%  { opacity: 1; left: 79%; top: 47%; }
+  38%  { opacity: 0; }
+  46%  { opacity: 0; left: var(--al-reg-in); top: var(--al-reg-in); }
+  50%  { opacity: 1; }
+  54%  { opacity: 0; }
+  58%  { opacity: 1; }
+  62%  { opacity: 0.35; }
+  66%  { opacity: 1; }
+  100% { opacity: 1; left: var(--al-reg-in); top: var(--al-reg-in); }
+}
+
+@keyframes al-reg-br {
+  0%   { opacity: 0; left: 33%; top: 57%; }
+  7%   { opacity: 1; left: 33%; top: 57%; }
+  14%  { opacity: 0; }
+  20%  { opacity: 1; left: 72%; top: 14%; }
+  27%  { opacity: 0; }
+  33%  { opacity: 1; left: 9%; top: 36%; }
+  41%  { opacity: 0; }
+  48%  { opacity: 0; left: var(--al-reg-far); top: var(--al-reg-far); }
+  52%  { opacity: 1; }
+  56%  { opacity: 0; }
+  60%  { opacity: 1; }
+  64%  { opacity: 0.35; }
+  68%  { opacity: 1; }
+  100% { opacity: 1; left: var(--al-reg-far); top: var(--al-reg-far); }
+}
+
+/* on phones the card fills the screen edge to edge, so there's no background for them */
+@media (max-width: 480px) {
+  .pf-c-login::before,
+  .pf-c-login::after {
+    display: none;
+  }
 }
 
 /* ---------- login card ---------- */
@@ -536,6 +618,146 @@ legend.pf-c-content h2 {
   color: var(--al-ash);
 }
 
+/* disabled buttons: quiet outline instead of grey on grey */
+.pf-c-button:disabled,
+.pf-c-button.pf-m-disabled,
+.pf-c-button.pf-m-aria-disabled {
+  --pf-c-button--disabled--BackgroundColor: transparent;
+  --pf-c-button--disabled--Color: var(--al-ash);
+  --pf-c-button--disabled--after--BorderColor: var(--al-rule);
+  background-color: transparent !important;
+  color: var(--al-ash) !important;
+}
+
+/* status labels (Yes / No, Active, …): authentik uses PatternFly's light pastel chips,
+   which put green text on near-white; draw them as outlined chips on the dark surface */
+.pf-c-label {
+  --al-label: var(--al-bone);
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  font-family: var(--al-mono);
+  font-variation-settings: "wdth" 85;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pf-c-label.pf-m-green { --al-label: var(--al-ok); }
+.pf-c-label.pf-m-orange,
+.pf-c-label.pf-m-gold { --al-label: var(--al-warn); }
+.pf-c-label.pf-m-red { --al-label: var(--al-down); }
+.pf-c-label.pf-m-blue,
+.pf-c-label.pf-m-cyan { --al-label: var(--al-acid); }
+.pf-c-label.pf-m-purple { --al-label: var(--al-ash); }
+
+.pf-c-label__content {
+  color: var(--al-label) !important;
+  background-color: transparent !important;
+}
+
+.pf-c-label__content::before {
+  border-color: var(--al-label) !important;
+  border-radius: 0 !important;
+}
+
+.pf-c-label__icon {
+  color: var(--al-label) !important;
+}
+
+/* skip link (keyboard users): dark text on acid, not bone */
+:host(ak-skip-to-content) button,
+:host(ak-skip-to-content) a {
+  color: var(--al-on-acid) !important;
+}
+
+/* ---------- notifications ---------- */
+
+/* unread badge on the bell: dark on acid, not light on acid */
+.pf-c-notification-badge.pf-m-unread {
+  --pf-c-notification-badge--m-unread--BackgroundColor: var(--al-acid);
+  --pf-c-notification-badge--m-unread--Color: var(--al-on-acid);
+  --pf-c-notification-badge--m-unread--hover--BackgroundColor: var(--al-acid-hi);
+  --pf-c-notification-badge--m-unread--hover--Color: var(--al-on-acid);
+  --pf-c-notification-badge--m-unread--after--BorderColor: transparent;
+  background-color: var(--al-acid);
+  color: var(--al-on-acid) !important;
+  border-radius: 0;
+}
+
+/* the icon keeps its icon font; only the count is set in mono */
+.pf-c-notification-badge.pf-m-unread i {
+  color: var(--al-on-acid) !important;
+}
+
+.pf-c-notification-badge.pf-m-unread .pf-c-notification-badge__count {
+  color: var(--al-on-acid) !important;
+  font-family: var(--al-mono);
+}
+
+/* the drawer sits above the library header (z-index 300), which otherwise covers its title */
+.pf-c-drawer__panel {
+  z-index: 400 !important;
+  background-color: var(--al-plate) !important;
+  border-left: 1px solid var(--al-rule);
+  box-shadow: none !important;
+}
+
+.pf-c-notification-drawer {
+  --pf-c-notification-drawer--BackgroundColor: var(--al-plate);
+  --pf-c-notification-drawer__header--BackgroundColor: var(--al-void);
+  --pf-c-notification-drawer__list-item--BackgroundColor: var(--al-plate);
+  --pf-c-notification-drawer__list-item--m-read--BackgroundColor: var(--al-plate);
+  --pf-c-notification-drawer__list-item--BorderBottomColor: var(--al-rule-subtle);
+  --pf-c-notification-drawer__list-item--m-read--before--BackgroundColor: transparent;
+  background-color: var(--al-plate);
+}
+
+.pf-c-notification-drawer__header {
+  background-color: var(--al-void) !important;
+  border-bottom: 1px solid var(--al-rule);
+  box-shadow: none !important;
+}
+
+.pf-c-notification-drawer__header-title {
+  font-family: var(--al-mono);
+  font-variation-settings: "wdth" 85;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--al-bone);
+}
+
+.pf-c-notification-drawer__list-item {
+  background-color: var(--al-plate) !important;
+  border-bottom: 1px solid var(--al-rule-subtle);
+  box-shadow: none !important;
+}
+
+.pf-c-notification-drawer__list-item-header-title {
+  color: var(--al-mark);
+}
+
+.pf-c-notification-drawer__list-item-description {
+  color: var(--al-bone);
+}
+
+.pf-c-notification-drawer__list-item-timestamp {
+  font-family: var(--al-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: var(--al-ash);
+}
+
+/* severity icons in the status colours; plain notices stay bone */
+.pf-c-notification-drawer__list-item-header-icon {
+  color: var(--al-bone);
+}
+
+.pf-c-notification-drawer__list-item-header-icon.pf-m-danger { color: var(--al-down); }
+.pf-c-notification-drawer__list-item-header-icon.pf-m-warning { color: var(--al-warn); }
+.pf-c-notification-drawer__list-item-header-icon.pf-m-success { color: var(--al-ok); }
+
 /* ---------- focus and motion ---------- */
 :focus-visible {
   outline: 2px solid var(--al-acid);
@@ -548,5 +770,10 @@ legend.pf-c-content h2 {
   *::after {
     transition-duration: 0s !important;
     animation-duration: 0s !important;
+  }
+
+  .pf-c-login::before,
+  .pf-c-login::after {
+    animation: none !important;
   }
 }

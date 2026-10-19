@@ -29,6 +29,7 @@
 | `branding/astralabs-lockup.svg` | Mark and `[ASTRA/LABS]` wordmark, used as the brand logo. |
 | `branding/astralabs-favicon.svg` | White mark on a carbon square, used as the favicon. |
 | `branding/astralabs-mark.svg` | The mark on its own, for anywhere a square logo fits better. |
+| `branding/astralabs-flow-background.svg` | Carbon with the 16px dot grid, used as the default flow background. |
 
 Tested on authentik **2025.10.3**. The CSS also sets the variables newer releases use (2026.x and the semantic `--ak-color-*` set), but those versions haven't been tested.
 
@@ -59,7 +60,10 @@ In the admin interface, go to **System → Brands** and edit your brand (the def
 | Title | `AstraLabs` |
 | Logo | `/static/dist/assets/icons/branding/astralabs-lockup.svg` |
 | Favicon | `/static/dist/assets/icons/branding/astralabs-favicon.svg` |
+| Default flow background | `/static/dist/assets/icons/branding/astralabs-flow-background.svg` |
 | Custom CSS | the whole of `astralabs.css` |
+
+The default flow background is a required field, and authentik's own default is a landscape photo. The CSS paints the dot grid over it either way, but the image still loads, and it shows wherever custom CSS doesn't apply, such as logging in with a recovery key. Individual flows can set their own background under **Flows → (flow) → Appearance**; leave that empty so they use this one.
 
 Then expand **Other global settings** and set **Attributes** to force dark mode. The theme is dark only, and without this a visitor whose browser prefers light mode gets authentik's light base under it:
 
@@ -88,7 +92,8 @@ python3 -c "import json; print(json.dumps({'branding_custom_css': open('astralab
 ## What's styled
 
 **Login and enrolment flows**
-- Carbon background with a faint 16px dot grid, replacing the flow background image.
+- Carbon background with a faint 16px dot grid.
+- Two Acid registration marks on the background. On load, each blinks in and out at three spots with hard cuts, then strobes into its corner (top-left and bottom-right) and holds, like the brand's Registration align. With reduced motion turned on they simply sit in the corners. They're hidden on phones, where the card fills the screen.
 - The card is a plate panel with a hairline border and bone corner ticks, and no shadow.
 - The stage title is heavy uppercase Archivo over a measurement rule (an Acid index segment, then a hairline with end ticks).
 - Field labels are mono uppercase. Required markers are Acid.
@@ -103,6 +108,12 @@ python3 -c "import json; print(json.dumps({'branding_custom_css': open('astralab
 
 **Admin interface**
 - The same palette, fonts and square corners. The current sidebar item gets an Acid bar instead of authentik's orange.
+- Status labels (Yes/No and similar) are outlined chips in the status colours, instead of PatternFly's light pastel chips, which put green text on near-white.
+- Radios, checkboxes and switches use Acid; disabled buttons are a quiet outline.
+
+**Notifications (both interfaces)**
+- The unread badge on the bell is Acid with dark text.
+- The drawer opens above the page, as a plate panel with a mono uppercase heading. Each notification's icon takes its severity colour (Bone for notices, orange for warnings, red for alerts).
 
 **Fonts**
 Archivo and Martian Mono load from Google Fonts through two `@import` lines at the top of the CSS. If a reverse proxy in front of authentik sets a Content-Security-Policy, allow `fonts.googleapis.com` and `fonts.gstatic.com`. Authentik itself doesn't set one.
