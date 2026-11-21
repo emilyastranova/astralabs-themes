@@ -97,7 +97,7 @@ python3 -c "import json; print(json.dumps({'branding_custom_css': open('astralab
 - Two Acid registration marks on the background. On load, each blinks in and out at three spots with hard cuts, then strobes into its corner (top-left and bottom-right) and holds, like the brand's Registration align. With reduced motion turned on they simply sit in the corners. On phones they sit 16px in.
 - The card sits centred in the screen with "Powered by authentik" pinned to the bottom. The page is sized to the visible screen (`dvh`), so phones don't have to scroll past the address bar to reach the footer.
 - The card is a plate panel with a hairline border and bone corner ticks, and no shadow.
-- The stage title is heavy uppercase Archivo over a measurement rule (an Acid index segment, then a hairline with end ticks).
+- The stage title is bold uppercase Chakra Petch over a measurement rule (an Acid index segment, then a hairline with end ticks).
 - Field labels are mono uppercase. Required markers are Acid.
 - Inputs are square on carbon with an Acid focus ring. Invalid fields turn the "down" red.
 - The primary button is Acid with dark mono text and the brand's single 60° cut in the top-right corner. Secondary buttons are outlined, and links are Bone with an Acid underline.
@@ -118,7 +118,7 @@ python3 -c "import json; print(json.dumps({'branding_custom_css': open('astralab
 - The drawer opens above the page, as a plate panel with a mono uppercase heading. Each notification's icon takes its severity colour (Bone for notices, orange for warnings, red for alerts).
 
 **Fonts**
-Archivo and Martian Mono load from Google Fonts through two `@import` lines at the top of the CSS. If a reverse proxy in front of authentik sets a Content-Security-Policy, allow `fonts.googleapis.com` and `fonts.gstatic.com`. Authentik itself doesn't set one.
+Chakra Petch and Martian Mono load from Google Fonts through two `@import` lines at the top of the CSS. If a reverse proxy in front of authentik sets a Content-Security-Policy, allow `fonts.googleapis.com` and `fonts.gstatic.com`. Authentik itself doesn't set one.
 
 ---
 

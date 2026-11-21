@@ -15,7 +15,7 @@
     (--pf-global--*), which every version still uses underneath.
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900");
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700");
 @import url("https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,100..800");
 
 /* ---------- tokens ----------
@@ -38,7 +38,7 @@ html:root,
   --al-warn: #ffa21f;
   --al-down: #ff2e3a;
   --al-dot: rgb(237 230 225 / 10%);
-  --al-sans: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --al-sans: "Chakra Petch", system-ui, sans-serif;
   --al-mono: "Martian Mono", ui-monospace, Menlo, monospace;
 
   /* authentik 2025.x: the dark theme is built from these */
@@ -369,8 +369,7 @@ ak-locale-select[part="locale-select"] {
 .pf-c-login__main-body .pf-c-title,
 .pf-c-title.pf-m-3xl {
   font-family: var(--al-sans);
-  font-weight: 800;
-  font-variation-settings: "wdth" 112;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.005em;
   font-size: 1.5rem;
@@ -761,8 +760,7 @@ ak-locale-select[part="locale-select"] {
 .pf-c-content h1,
 .pf-c-page__main-section .pf-c-title {
   font-family: var(--al-sans);
-  font-weight: 800;
-  font-variation-settings: "wdth" 110;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--al-mark);
 }
