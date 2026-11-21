@@ -1,0 +1,5 @@
+dist/
+.venv/
+__pycache__/
+# third-party theme kept locally for reference only
+reference/

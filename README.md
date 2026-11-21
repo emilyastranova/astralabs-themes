@@ -1,7 +1,7 @@
 <h1 align="center">AstraLabs Themes</h1>
 
 <p align="center">
-  The AstraLabs look for the self-hosted web services behind <a href="https://astralabs.dev">astralabs.dev</a>.<br>
+  The AstraLabs look for the self-hosted services behind <a href="https://astralabs.dev">astralabs.dev</a> and the apps around them.<br>
   One folder per service, each with its stylesheet, brand assets and setup instructions.
 </p>
 
@@ -28,6 +28,15 @@
       Tested on authentik 2025.10.3 and 2026.2.7.
     </td>
   </tr>
+  <tr>
+    <td width="45%">
+      <a href="cocoon/"><img src="cocoon/docs/images/main.png" alt="The Cocoon wallpaper: the AstraLabs lockup over the dot field"></a>
+    </td>
+    <td>
+      <h3><a href="cocoon/">Cocoon</a></h3>
+      The Cocoon launcher on Android handhelds. Colors and settings, live dot-field wallpapers with the oscilloscope beam, smart-folder art and a synthesized sound set, packaged as a ZIP for Import ZIP.
+    </td>
+  </tr>
 </table>
 
 ---
@@ -46,7 +55,7 @@ Every theme here follows the same rules, so the services read as one system. The
 | Acid | `#B6FF2E` | Primary actions, focus, selection, with Void text on top |
 | OK / Warn / Down | `#4DFF88` / `#FFA21F` / `#FF2E3A` | Status only, always with a label |
 
-- **Type.** Archivo for headings and body; Martian Mono for labels, data and code. Headings are heavy uppercase; labels are small mono uppercase with wide tracking.
+- **Type.** Chakra Petch for headings and body; Martian Mono for labels, data and code. Headings are bold uppercase; labels are small mono uppercase with wide tracking.
 - **Geometry.** Square corners everywhere. The one exception is a 60° cut on the filled primary button, and there is only one per view.
 - **Line work.** Hairline rules, corner ticks, a measurement rule under page titles, and a faint 16px dot grid behind pages. No drop shadows, no glows.
 - **Links.** Bone with an Acid underline, turning Acid on hover.
@@ -73,6 +82,6 @@ Before calling a theme done, run the service locally at the version you're targe
 
 ---
 
-## Licence
+## License
 
 Copyright © 2026 Emily Astranova. Licensed under the [GNU Affero General Public License v3.0](LICENSE).
